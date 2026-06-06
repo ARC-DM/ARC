@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcDaemon", "ArcDaemon\ArcDaemon.csproj", "{40638081-0A47-4E2A-94DC-F86D7B61C1B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcConsole", "ArcConsole\ArcConsole.csproj", "{D421C779-4E29-47C9-81DB-3E8E9ED9A489}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcShared", "ArcShared\ArcShared.csproj", "{E8EEE226-A762-4D8C-921C-96BD24C57065}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcPortal", "ArcPortal\ArcPortal.csproj", "{1E84580C-51DB-4DB5-B250-A3EB2EED3402}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40638081-0A47-4E2A-94DC-F86D7B61C1B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40638081-0A47-4E2A-94DC-F86D7B61C1B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40638081-0A47-4E2A-94DC-F86D7B61C1B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40638081-0A47-4E2A-94DC-F86D7B61C1B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D421C779-4E29-47C9-81DB-3E8E9ED9A489}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D421C779-4E29-47C9-81DB-3E8E9ED9A489}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D421C779-4E29-47C9-81DB-3E8E9ED9A489}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D421C779-4E29-47C9-81DB-3E8E9ED9A489}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8EEE226-A762-4D8C-921C-96BD24C57065}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8EEE226-A762-4D8C-921C-96BD24C57065}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8EEE226-A762-4D8C-921C-96BD24C57065}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8EEE226-A762-4D8C-921C-96BD24C57065}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E84580C-51DB-4DB5-B250-A3EB2EED3402}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E84580C-51DB-4DB5-B250-A3EB2EED3402}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E84580C-51DB-4DB5-B250-A3EB2EED3402}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E84580C-51DB-4DB5-B250-A3EB2EED3402}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -7,6 +7,7 @@
 
 <p align="center">
   <img height="80" src="https://github.com/ARC-DM/ARC/raw/master/docs/static/built_with_c%23.svg" alt="Built with C#">
+  <img height="80" src="https://github.com/ARC-DM/ARC/raw/master/docs/static/project_in_alpha.svg" alt="Project in ALPHA">
 </p>
 
 <p align="center">

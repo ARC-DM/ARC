@@ -43,8 +43,6 @@
 
 Arc requires the **.NET 10.0 Runtime or SDK** (or higher) to execute natively on Windows machines. 
 
-To set up the Arc control environment locally or start developing custom modules, clone the repository and compile the binaries directly using the .NET CLI:
-
 ## 📦 Project Contents
 
 Arc is modularly split into 4 distinct C# sub-projects designed to work in tandem:

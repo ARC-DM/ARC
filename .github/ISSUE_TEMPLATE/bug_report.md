@@ -1,38 +1,50 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
+name: Bug Report
+about: Something isn't working as expected
+title: "[BUG] "
+labels: bug
 assignees: ''
-
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## Description
+A clear description of what the bug is. What did you expect to happen, and what actually happened?
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+## Steps to Reproduce
+1. 
+2. 
+3. 
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+## Expected Behaviour
+What should have happened?
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+## Actual Behaviour
+What actually happened? Include any error messages or stack traces.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+```
+Paste error output here
+```
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+## Environment
 
-**Additional context**
-Add any other context about the problem here.
+| Field | Value |
+|---|---|
+| Arc Version | e.g. 0.1.0 |
+| Component | e.g. ArcDaemon / ArcConsole / ArcPortal |
+| Windows Version | e.g. Windows 11 23H2 |
+| .NET Version | e.g. 10.0.8 |
+| Daemon running as service? | Yes / No |
+
+## Command Used (if applicable)
+```
+e.g. RUNSCRIPT --path C:\scripts\setup.ps1
+```
+
+## ArcDaemon Log Output (if applicable)
+Check Windows Event Viewer → Application → Source: ArcDaemon, or the Rider console output if running in debug mode.
+
+```
+Paste relevant log output here
+```
+
+## Additional Context
+Any other context, screenshots, or information that might help diagnose the issue.

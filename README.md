@@ -1,20 +1,20 @@
 <h1 align="center">
   <picture>
-    <source height="125" media="(prefers-color-scheme: dark)" srcset="https://github.com/Ethernalcom/Arc/raw/master/docs/static/ARC-Logo-Light.svg">
-    <img height="125" alt="Arc Logo" src="https://github.com/Ethernalcom/Arc/raw/master/docs/static/ARC-Logo-Dark.svg">
+    <source height="125" media="(prefers-color-scheme: dark)" srcset="https://github.com/ARC-DM/ARC/raw/master/docs/static/ARC-Logo-Light.svg">
+    <img height="125" alt="Arc Logo" src="https://github.com/ARC-DM/ARC/raw/master/docs/static/ARC-Logo-Dark.svg">
   </picture>
 </h1>
 
 <p align="center">
-  <img height="40" src="https://github.com/Ethernalcom/Arc/raw/master/docs/static/built_with_c%23.svg" alt="Built with C#">
+  <img height="40" src="https://github.com/ARC-DM/ARC/raw/master/docs/static/built_with_c%23.svg" alt="Built with C#">
 </p>
 
 <p align="center">
-  <a href="https://github.com/Ethernalcom/Arc/actions?query=workflow%3ABuild">
-    <img src="https://img.shields.io/github/actions/workflow/status/Ethernalcom/Arc/build.yml?branch=main&label=%E2%9A%99%EF%B8%8F%20build&style=flat-square&color=512bd4">
+  <a href="https://github.com/ARC-DM/ARC/actions?query=workflow%3ABuild">
+    <img src="https://img.shields.io/github/actions/workflow/status/ARC-DM/ARC/build.yml?branch=main&label=%E2%9A%99%EF%B8%8F%20build&style=flat-square&color=512bd4">
   </a>
-  <a href="https://github.com/Ethernalcom/Arc/releases">
-    <img src="https://img.shields.io/github/v/release/Ethernalcom/Arc?include_prereleases&label=%F0%9F%93%A6%20release&style=flat-square&color=512bd4">
+  <a href="https://github.com/ARC-DM/ARC/releases">
+    <img src="https://img.shields.io/github/v/release/ARC-DM/ARC?include_prereleases&label=%F0%9F%93%A6%20release&style=flat-square&color=512bd4">
   </a>
   <a href="https://dotnet.microsoft.com/en-us/download">
     <img src="https://img.shields.io/badge/%F0%9F%92%BF%20platform-windows-0078d4?style=flat-square">

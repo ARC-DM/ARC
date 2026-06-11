@@ -12,6 +12,7 @@ public static class ArcConstants
     public const string ActionWhoAmI = "WHOAMI";
     public const string ActionProcesses = "PROCESSES";
     public const string ActionSystemReport = "SYSREPORT";
+    public const string ActionDrives = "LIST_DRIVES";
     public const string ArcPortalIdentifier = "ARC-P";
     public const string ArcConsoleIdentifier = "ARC-C";
 }

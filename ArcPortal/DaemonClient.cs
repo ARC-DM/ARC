@@ -1,13 +1,12 @@
-﻿using System.IO;
+using System.IO;
 using System.IO.Pipes;
 using System.Text.Json;
 using ArcShared;
 
-namespace ArcConsole;
+namespace ArcPortal;
 
 public class DaemonClient(Action<ArcMessage> onMessage)
 {
-
     public async Task SendCommandAsync(ArcCommand command)
     {
         using var clientStream = new NamedPipeClientStream(".", ArcConstants.PipeName, PipeDirection.InOut, PipeOptions.Asynchronous);

@@ -26,7 +26,7 @@ public partial class MainWindow : Window
                 await OutputWebView.ExecuteScriptAsync($@"
             var div = document.createElement('div');
             div.style.color = '{color}';
-            div.style.whiteSpace = 'pre-wrap'; // Add this here too!
+            div.style.whiteSpace = 'pre-wrap';
             div.innerText = {escapedPayload};
             document.getElementById('output').appendChild(div);
             document.getElementById('output').scrollTop = document.getElementById('output').scrollHeight;
@@ -87,7 +87,6 @@ public partial class MainWindow : Window
         await OutputWebView.ExecuteScriptAsync($@"
     var div = document.createElement('div');
     div.style.color = '#888888';
-    // Add this line to preserve your spaces and line breaks
     div.style.whiteSpace = 'pre-wrap'; 
     div.innerText = '> ' + {escapedCommand};
     document.getElementById('output').appendChild(div);

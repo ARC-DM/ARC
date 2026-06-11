@@ -17,4 +17,5 @@ dispatcher.RegisterActionHandler(ArcConstants.ActionUninstall, new UninstallHand
 dispatcher.RegisterActionHandler(ArcConstants.ActionWhoAmI, new whoIsHandler());
 dispatcher.RegisterActionHandler(ArcConstants.ActionProcesses, new ProcessesHandler());
 dispatcher.RegisterActionHandler(ArcConstants.ActionSystemReport, new systemReportHandler());
+dispatcher.RegisterActionHandler(ArcConstants.ActionDrives, new DiskHandler());
 host.Run();

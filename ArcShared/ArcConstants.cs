@@ -5,6 +5,7 @@ public static class ArcConstants
     public const string PipeName = "ArcDaemonPipe";
     public const string MessageTypeProgress = "PROGRESS";
     public const string MessageTypeResult = "RESULT";
+    public const string MessageTypeCallback = "CALLBACK";
     public const string ActionPing = "PING";
     public const string ActionParameterTest = "PARAMETER_TEST";
     public const string ActionInstall = "INSTALL";
@@ -13,6 +14,7 @@ public static class ArcConstants
     public const string ActionProcesses = "PROCESSES";
     public const string ActionSystemReport = "SYSREPORT";
     public const string ActionDrives = "LIST_DRIVES";
+    public const string ActionHelp = "HELP";
     public const string ArcPortalIdentifier = "ARC-P";
     public const string ArcConsoleIdentifier = "ARC-C";
 }

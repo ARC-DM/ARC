@@ -64,10 +64,10 @@ The IT administrator interface. Issue real-time commands to individual devices o
 The background engine deployed on every managed device. Runs as a native Windows Service with SYSTEM-level privileges, receives authenticated commands, executes them, and streams results back in real time. ArcDaemon is the core of Arc — everything else talks to it.
 
 ### 🌐 ArcPortal (`ARC-P`)
-The end-user self-service interface. Lets employees install approved software, check their device status, and manage permitted settings — all within boundaries defined by the IT admin in ArcConsole. Think Microsoft Company Portal, but faster and fully under your control.
+The end-user self-service interface. Lets users install approved software, check their device status, and manage permitted settings — all within boundaries defined by the IT admin in ArcConsole. Think Microsoft Company Portal, but faster and fully under your control.
 
 ### 🔗 ArcShared (`ARC-S`)
-The shared contract layer. Defines the command and message structures (`ArcCommand`, `ArcMessage`) used across all three projects, ensuring every component speaks the same language. Neither ArcConsole, ArcDaemon nor ArcPortal can disagree on data shapes — ArcShared is the single source of truth.
+The shared contract layer. Defines the command and message structures (`ArcCommand`, `ArcMessage`) used across all three projects, ensuring every component speaks the same language. Neither ArcConsole, ArcDaemon nor ArcPortal can disagree on data shapes
 
 ## 🔀 Architecture
 
@@ -180,7 +180,7 @@ ARC is not trying to replace Intune for every enterprise. It's for teams that wa
 
 **Ways to contribute:**
 - Browse [open issues](https://github.com/ARC-DM/ARC/issues) and pick something up
-- Propose a new command via the [Command Proposal](.github/ISSUE_TEMPLATE/command_proposal.md) template
+- Propose a new command via the [Command Proposal](.github/ISSUE_TEMPLATE/command_proposal.md) issue template
 - Report a bug or unexpected behaviour
 - Improve documentation
 

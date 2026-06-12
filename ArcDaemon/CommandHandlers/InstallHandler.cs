@@ -11,11 +11,9 @@ public class InstallHandler : IActionHandler
         ArcCommand command,
         [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        // Try to get either parameter
         command.Parameters.TryGetValue("app", out var appName);
         command.Parameters.TryGetValue("id", out var appId);
 
-        // If both are null/empty, we can't proceed
         if (string.IsNullOrEmpty(appName) && string.IsNullOrEmpty(appId))
         {
             yield return new ArcMessage(ArcConstants.MessageTypeResult, command.Id,
@@ -25,9 +23,9 @@ public class InstallHandler : IActionHandler
 
         yield return new ArcMessage(ArcConstants.MessageTypeProgress, command.Id, "Starting installation...", true);
 
+        // 1. Create a Channel to pipe stdout/stderr back as progress messages
         var channel = Channel.CreateUnbounded<string>();
 
-        // Set up arguments based on priority (ID takes precedence)
         var arguments = !string.IsNullOrEmpty(appId)
             ? $"install -e --id {appId} --silent --accept-package-agreements --accept-source-agreements"
             : $"install {appName} --silent --accept-package-agreements --accept-source-agreements";
@@ -56,12 +54,24 @@ public class InstallHandler : IActionHandler
         process.BeginOutputReadLine();
         process.BeginErrorReadLine();
 
-        // Stream lines as they arrive
-        await foreach (var line in channel.Reader.ReadAllAsync(cancellationToken))
-            yield return new ArcMessage(ArcConstants.MessageTypeProgress, command.Id, line, true);
+        // 2. Start a background task to safely await the process exit and close the channel
+        var processWaitTask = Task.Run(async () =>
+        {
+            try
+            {
+                await process.WaitForExitAsync(cancellationToken);
+            }
+            finally
+            {
+                // This signals to Channel.Reader that no more logs are coming
+                channel.Writer.TryComplete();
+            }
+        }, cancellationToken);
 
-        await process.WaitForExitAsync(cancellationToken);
+        // 4. Ensure the process tracking task itself is fully wrapped up
+        await processWaitTask;
 
+        // 5. Now it is 100% safe to send the final result
         yield return new ArcMessage(
             ArcConstants.MessageTypeResult,
             command.Id,

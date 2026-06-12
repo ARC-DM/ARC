@@ -8,12 +8,16 @@ public class TaskDispatcher
 {
     private Dictionary<string, IActionHandler> ActionHandlers { get; } = new();
 
+    // Expose the keys so the HelpHandler can discover what is registered
+    public IEnumerable<string> RegisteredActions => ActionHandlers.Keys;
+
     public void RegisterActionHandler(string action, IActionHandler handler)
     {
         ActionHandlers.Add(action, handler);
     }
 
-    public async IAsyncEnumerable<ArcMessage> DispatchAsync(ArcCommand command, [EnumeratorCancellation] CancellationToken ct)
+    public async IAsyncEnumerable<ArcMessage> DispatchAsync(ArcCommand command,
+        [EnumeratorCancellation] CancellationToken ct)
     {
         if (ActionHandlers.TryGetValue(command.Action, out var handler))
         {
@@ -25,7 +29,8 @@ public class TaskDispatcher
         }
         else
         {
-            yield return new ArcMessage(ArcConstants.MessageTypeResult, command.Id, $"Unknown action: {command.Action}", false);
+            yield return new ArcMessage(ArcConstants.MessageTypeResult, command.Id, $"Unknown action: {command.Action}",
+                false);
         }
     }
 }

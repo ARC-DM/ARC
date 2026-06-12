@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Windows;
-using Microsoft.Web.WebView2.Core;
 using ArcShared;
+using Microsoft.Web.WebView2.Core;
 
 namespace ArcConsole;
 
@@ -19,18 +19,40 @@ public partial class MainWindow : Window
         {
             Dispatcher.Invoke(async () =>
             {
+                string commandIdStr = message.CommandId.ToString();
+
+                if (message.Type == ArcConstants.MessageTypeResult)
+                {
+                    string statusSymbol = message.IsSuccess ? "✓" : "✕";
+                    string statusClass = message.IsSuccess ? "status-success" : "status-error";
+
+                    await OutputWebView.ExecuteScriptAsync($@"
+                        var spinner = document.getElementById('spinner-' + '{commandIdStr}');
+                        if (spinner) {{ 
+                            spinner.className = '{statusClass}';
+                            spinner.innerText = '{statusSymbol}';
+                        }}
+                    ");
+                }
+
+                // Hides the callback ("command received") ack for UI
+                if (message.Type == ArcConstants.MessageTypeCallback)
+                {
+                    return; // Exit early without creating a UI element
+                }
+
                 string escapedPayload = JsonSerializer.Serialize(message.Payload);
                 string color = message.IsSuccess ? "#00ff00" : "#ff4444";
                 if (message.Type == ArcConstants.MessageTypeProgress) color = "#ffffff";
-                
+
                 await OutputWebView.ExecuteScriptAsync($@"
-            var div = document.createElement('div');
-            div.style.color = '{color}';
-            div.style.whiteSpace = 'pre-wrap';
-            div.innerText = {escapedPayload};
-            document.getElementById('output').appendChild(div);
-            document.getElementById('output').scrollTop = document.getElementById('output').scrollHeight;
-        ");
+                    var div = document.createElement('div');
+                    div.style.color = '{color}';
+                    div.style.whiteSpace = 'pre-wrap';
+                    div.innerText = {escapedPayload};
+                    document.getElementById('output').appendChild(div);
+                    document.getElementById('output').scrollTop = document.getElementById('output').scrollHeight;
+                ");
             });
         });
     }
@@ -51,6 +73,52 @@ public partial class MainWindow : Window
                     .input-area { position: relative; z-index: 2; padding: 20px; border-top: 1px solid #333; display: flex; gap: 10px; background: rgba(10, 10, 15, 0.8); }
                     input { flex-grow: 1; background: #1a1a24; color: white; border: 1px solid #444; padding: 8px; border-radius: 4px; }
                     button { padding: 8px 16px; cursor: pointer; background: #252526; color: white; border: 1px solid #444; border-radius: 4px; }
+                    
+                    /* CSS Spinner Styles */
+                    .command-row { 
+                        display: flex; 
+                        align-items: center; 
+                        justify-content: space-between;
+                        width: 100%;
+                        color: #888888; 
+                        white-space: pre-wrap; 
+                        border-top: 1px solid rgba(255, 255, 255, 0.1); 
+                        margin-top: 12px;                               
+                        padding-top: 8px;                               
+                    }
+                    .spinner {
+                        width: 12px;
+                        height: 12px;
+                        border: 2px solid rgba(255,255,255,0.2);
+                        border-top-color: #00fffa;
+                        border-radius: 50%;
+                        animation: spin 0.8s linear infinite, fadeIn 0.2s ease-in forwards;
+                        animation-delay: 0s, 0.1s;
+                        opacity: 0;
+                        display: inline-block;
+                    }
+
+                    /* End Status Styles */
+                    .status-success {
+                        color: #00ff00;
+                        font-weight: bold;
+                        display: inline-block;
+                        animation: fadeIn 0.15s ease-out forwards;
+                    }
+                    .status-error {
+                        color: #ff4444;
+                        font-weight: bold;
+                        display: inline-block;
+                        animation: fadeIn 0.15s ease-out forwards;
+                    }
+
+                    @keyframes spin {
+                        to { transform: rotate(360deg); }
+                    }
+
+                    @keyframes fadeIn {
+                        to { opacity: 1; }
+                    }
                 </style>
             </head>
             <body>
@@ -75,24 +143,45 @@ public partial class MainWindow : Window
 
         OutputWebView.CoreWebView2.NavigateToString(html);
         OutputWebView.CoreWebView2.WebMessageReceived += OnWebMessageReceived;
+
+        await OutputWebView.ExecuteScriptAsync($@"
+            var div = document.createElement('div');
+            div.style.color = '#00fffa';
+            div.style.whiteSpace = 'pre-wrap';
+            div.innerText = 'Welcome to the ARC console! Type HELP for a list of commands.';
+            document.getElementById('output').appendChild(div);
+            document.getElementById('output').scrollTop = document.getElementById('output').scrollHeight;
+        ");
     }
 
     private async void OnWebMessageReceived(object? sender, CoreWebView2WebMessageReceivedEventArgs e)
     {
         string commandText = e.TryGetWebMessageAsString();
         if (string.IsNullOrWhiteSpace(commandText)) return;
-    
-        // Call your existing command logic
-        string escapedCommand = JsonSerializer.Serialize(commandText);
-        await OutputWebView.ExecuteScriptAsync($@"
-    var div = document.createElement('div');
-    div.style.color = '#888888';
-    div.style.whiteSpace = 'pre-wrap'; 
-    div.innerText = '> ' + {escapedCommand};
-    document.getElementById('output').appendChild(div);
-    document.getElementById('output').scrollTop = document.getElementById('output').scrollHeight;
-");
+
         ArcCommand command = CommandParser.Parse(commandText);
+        string commandIdStr = command.Id.ToString();
+        string escapedCommand = JsonSerializer.Serialize(commandText);
+
+        await OutputWebView.ExecuteScriptAsync($@"
+            var row = document.createElement('div');
+            row.className = 'command-row';
+            row.id = 'cmd-row-' + '{commandIdStr}';
+            
+            var textSpan = document.createElement('span');
+            textSpan.innerText = '> ' + {escapedCommand};
+            
+            var spinnerSpan = document.createElement('span');
+            spinnerSpan.className = 'spinner';
+            spinnerSpan.id = 'spinner-' + '{commandIdStr}';
+            
+            row.appendChild(textSpan);
+            row.appendChild(spinnerSpan);
+            
+            document.getElementById('output').appendChild(row);
+            document.getElementById('output').scrollTop = document.getElementById('output').scrollHeight;
+        ");
+
         await _client.SendCommandAsync(command);
     }
 }

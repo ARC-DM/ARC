@@ -14,8 +14,10 @@ dispatcher.RegisterActionHandler(ArcConstants.ActionPing, new PingHandler());
 dispatcher.RegisterActionHandler(ArcConstants.ActionParameterTest, new ParameterTestHandler());
 dispatcher.RegisterActionHandler(ArcConstants.ActionInstall, new InstallHandler());
 dispatcher.RegisterActionHandler(ArcConstants.ActionUninstall, new UninstallHandler());
-dispatcher.RegisterActionHandler(ArcConstants.ActionWhoAmI, new whoIsHandler());
+dispatcher.RegisterActionHandler(ArcConstants.ActionWhoAmI, new WhoIsHandler());
 dispatcher.RegisterActionHandler(ArcConstants.ActionProcesses, new ProcessesHandler());
-dispatcher.RegisterActionHandler(ArcConstants.ActionSystemReport, new systemReportHandler());
+dispatcher.RegisterActionHandler(ArcConstants.ActionSystemReport, new SystemReportHandler());
 dispatcher.RegisterActionHandler(ArcConstants.ActionDrives, new DiskHandler());
+
+dispatcher.RegisterActionHandler(ArcConstants.ActionHelp, new HelpHandler(dispatcher));
 host.Run();

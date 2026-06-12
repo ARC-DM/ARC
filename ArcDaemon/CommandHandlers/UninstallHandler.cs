@@ -11,11 +11,9 @@ public class UninstallHandler : IActionHandler
         ArcCommand command,
         [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        // Try to get either parameter
         command.Parameters.TryGetValue("app", out var appName);
         command.Parameters.TryGetValue("id", out var appId);
 
-        // If both are null/empty, we can't proceed
         if (string.IsNullOrEmpty(appName) && string.IsNullOrEmpty(appId))
         {
             yield return new ArcMessage(ArcConstants.MessageTypeResult, command.Id,
@@ -27,7 +25,6 @@ public class UninstallHandler : IActionHandler
 
         var channel = Channel.CreateUnbounded<string>();
 
-        // Set up arguments based on priority (ID takes precedence)
         var arguments = !string.IsNullOrEmpty(appId)
             ? $"uninstall -e --id {appId} --silent --accept-source-agreements"
             : $"uninstall {appName} --silent --accept-source-agreements";
@@ -56,12 +53,24 @@ public class UninstallHandler : IActionHandler
         process.BeginOutputReadLine();
         process.BeginErrorReadLine();
 
-        // Stream lines as they arrive
-        await foreach (var line in channel.Reader.ReadAllAsync(cancellationToken))
-            yield return new ArcMessage(ArcConstants.MessageTypeProgress, command.Id, line, true);
+        // 1. Kick off a background task to wait for exit and close the channel writer
+        var processWaitTask = Task.Run(async () =>
+        {
+            try
+            {
+                await process.WaitForExitAsync(cancellationToken);
+            }
+            finally
+            {
+                // This breaks out of the 'await foreach' loop below
+                channel.Writer.TryComplete();
+            }
+        }, cancellationToken);
 
-        await process.WaitForExitAsync(cancellationToken);
+        // 3. Await the process tracking task to ensure everything cleanly wrapped up
+        await processWaitTask;
 
+        // 4. Send your final result
         yield return new ArcMessage(
             ArcConstants.MessageTypeResult,
             command.Id,

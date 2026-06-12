@@ -281,7 +281,7 @@ public partial class MainWindow : Window
 <div class=""card-contents"">Run a PING test on your device.</div>
 <div class=""card-footer"">
 <span class=""card-meta"">v2.4.1 · 14 MB</span>
-<button class=""btn-install"" onclick=""send('PING')"">Run</button>
+<button class=""btn-install"" onclick=""send('WHOAMI')"">Run</button>
 </div>
 </div>
 <div class=""card"">

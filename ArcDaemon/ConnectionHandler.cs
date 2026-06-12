@@ -16,8 +16,16 @@ public class ConnectionHandler(ILogger<ConnectionHandler> logger, TaskDispatcher
 
         ArcCommand? arcCommand = JsonSerializer.Deserialize<ArcCommand>(json);
         if (arcCommand is null) return;
+        
+        // Check if user exists in database
+        if (AuthenticationHandler.DoesUserExist(arcCommand.Requester) == false)
+        {
+            logger.LogInformation("User {username} not found", arcCommand.Requester);
+            // Create user since they dont exist
+            AuthenticationHandler.AddUser(arcCommand.Requester, "NONE");
+        }
 
-        logger.LogInformation("Received command: {Id} - {Command}", arcCommand.Id, arcCommand.Action);
+        logger.LogInformation("Received command: {Id} - {Command} | {Requester} {FrontIdentifier}", arcCommand.Id, arcCommand.Action, arcCommand.Requester, arcCommand.ArcIdentifier);
 
         // 1. Initial "Command Received" message
         var initialMessage = new ArcMessage(ArcConstants.MessageTypeCallback, arcCommand.Id, "Command Received", false);

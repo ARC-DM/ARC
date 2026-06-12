@@ -1,0 +1,77 @@
+name: Build and Draft Release
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write # Crucial parameter to allow the runner to create a Draft Release
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Install .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x # Adjust this if you are using .NET 9.0
+
+    # 1. Compile and Execute Unit Tests
+    - name: Run Tests
+      run: dotnet test --configuration Release
+
+    # 2. Package ArcConsole (WPF App)
+    - name: Publish ArcConsole
+      run: |
+        dotnet publish ArcConsole/ArcConsole.csproj `
+          --configuration Release `
+          --runtime win-x64 `
+          --self-contained true `
+          -p:PublishSingleFile=true `
+          -p:PublishReadyToRun=true `
+          --output ./publish/ArcConsole
+
+    # 3. Package ArcDaemon (Windows Service / Worker)
+    - name: Publish ArcDaemon
+      run: |
+        dotnet publish ArcDaemon/ArcDaemon.csproj `
+          --configuration Release `
+          --runtime win-x64 `
+          --self-contained true `
+          -p:PublishSingleFile=true `
+          --output ./publish/ArcDaemon
+
+    # 4. Compress Binaries into clean Zip Files for the Release asset panel
+    - name: Archive Binaries
+      shell: powershell
+      run: |
+        Compress-Archive -Path ./publish/ArcConsole/* -DestinationPath ./ArcConsole-win-x64.zip
+        Compress-Archive -Path ./publish/ArcDaemon/* -DestinationPath ./ArcDaemon-win-x64.zip
+
+    # 5. Extract short commit hash to dynamically name the draft tag
+    - name: Generate Short Hash
+      id: vars
+      shell: powershell
+      run: |
+        $sha = git rev-parse --short HEAD
+        echo "sha=$sha" >> $env:GITHUB_OUTPUT
+
+    # 6. Push archives directly to a Draft Release on GitHub (Triggered only on master pushes)
+    - name: Create Draft Release
+      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Built-in GitHub credential, no setup required
+      run: |
+        gh release create "build-${{ steps.vars.outputs.sha }}" `
+          ./ArcConsole-win-x64.zip `
+          ./ArcDaemon-win-x64.zip `
+          --title "Draft Build: ${{ steps.vars.outputs.sha }}" `
+          --notes "Automated CI compiled binaries for testing. Modify notes before publishing." `
+          --draft
